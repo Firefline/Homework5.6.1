@@ -5,12 +5,21 @@
 #include <string>
 #include <map>
 
+struct cmp
+{
+    bool operator()(const char& a, const char& b) const
+    {
+        return a > b;
+    }
+};
+
 int main(int argc, char** argv)
 {
     setlocale(LC_ALL, "Russian");
     
     std::map<char, int> map;
-    std::multimap<int, char> map_reverse;
+    std::multimap<int, char, cmp> map_reverse;
+    std::multimap<int, char>::iterator it;
     std::string word;
 
     std::cout << "[IN]: ";
@@ -20,14 +29,12 @@ int main(int argc, char** argv)
     {
         ++map[a];
     }
-
-    std::cout << "[OUT]: " << std::endl;
     for (const auto& a : map)
     {
-        //std::cout << a.first <<  ": " << a.second << std::endl;
-        map_reverse[a.second] = a.first;
+        map_reverse.insert({ a.second, a.first });
     }
 
+    std::cout << "[OUT]: " << std::endl;
     for (const auto& a : map_reverse)
     {
         std::cout << a.second << ": " << a.first << std::endl;
